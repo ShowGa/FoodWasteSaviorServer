@@ -52,6 +52,14 @@ public class Stores {
 
     // Packages (additional)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private List<Package> packages;
+    private List<Packages> packages;
+
+    // Orders
+    @OneToMany(mappedBy = "store")
+    private List<Orders> orders;
+
+    // Reviews
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Reviews> reviews;
 }
 

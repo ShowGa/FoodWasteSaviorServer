@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -61,10 +62,18 @@ public class Packages {
     private Stores store;
 
     // Package_Sales_Rules
-    // Orders
-    // Favorites
+    @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL)
+    private List<PackageSalesRules> packageSalesRules;
 
-    // ========== Create AddressType enum Class ========== //
+    // Orders
+    @OneToMany(mappedBy = "pack")
+    private List<Orders> orders;
+
+    // Favorites
+    @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL)
+    private List<Favorites> favorites;
+
+    // ========== Create Category enum Class ========== //
     public enum Category {
         MEALS, BAKERY, GROCERY, OTHERS
     }

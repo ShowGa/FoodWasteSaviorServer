@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -44,8 +45,14 @@ public class Users {
     private Address address;
 
     // Orders
+    @OneToMany(mappedBy = "user")
+    private List<Orders> orders;
 
     // Favorites
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Favorites> favorites;
 
     // Reviews
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Reviews> reviews;
 }
