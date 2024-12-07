@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Users")
-public class Users {
+@Table(name = "User")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,15 +44,15 @@ public class Users {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Address address;
 
-    // Orders
+    // Order
     @OneToMany(mappedBy = "user")
-    private List<Orders> orders;
+    private List<Order> orders;
 
-    // Favorites
+    // Favorite
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Favorites> favorites;
+    private List<Favorite> favorites;
 
-    // Reviews
+    // Review
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Reviews> reviews;
+    private List<Review> reviews;
 }

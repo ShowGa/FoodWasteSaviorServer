@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Packages")
-public class Packages {
+@Table(name = "Package")
+public class Package {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,22 +56,22 @@ public class Packages {
     private LocalDateTime updatedAt;
 
     // ========== Define Relation Table ========== //
-    // Stores
+    // Store
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
-    private Stores store;
+    private Store store;
 
     // Package_Sales_Rules
     @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL)
-    private List<PackageSalesRules> packageSalesRules;
+    private List<PackageSalesRule> packageSalesRules;
 
-    // Orders
+    // Order
     @OneToMany(mappedBy = "pack")
-    private List<Orders> orders;
+    private List<Order> orders;
 
-    // Favorites
+    // Favorite
     @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL)
-    private List<Favorites> favorites;
+    private List<Favorite> favorites;
 
     // ========== Create Category enum Class ========== //
     public enum Category {

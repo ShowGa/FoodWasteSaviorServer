@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -15,8 +14,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Package_Sales_Rules")
-public class PackageSalesRules {
+@Table(name = "Package_Sales_Rule")
+public class PackageSalesRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +48,6 @@ public class PackageSalesRules {
     // ========== Define Relation Table ========== //
     @ManyToOne
     @JoinColumn(name = "package_id", nullable = false)
-    private Packages pack; //  Packages
+    private Package pack; //  Packages
 }
 

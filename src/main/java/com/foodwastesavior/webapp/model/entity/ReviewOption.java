@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ReviewOptions")
-public class ReviewOptions {
+@Table(name = "ReviewOption")
+public class ReviewOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

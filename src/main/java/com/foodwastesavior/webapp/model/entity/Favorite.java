@@ -12,17 +12,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Reviews")
-public class Reviews {
+@Table(name = "Favorite", uniqueConstraints = {
+        // check the combination is unique
+        @UniqueConstraint(columnNames = {"user_id", "package_id"})
+})
+public class Favorite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private Integer reviewId;
-
-    @Column(nullable = false)
-    private int rating; // Check Rating in service 1 - 5
-
+    @Column(name = "favorite_id")
+    private Integer favoriteId;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -31,14 +30,10 @@ public class Reviews {
     // ========== Define Relation Table ========== //
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
-    private Stores store;
-
-    @ManyToOne
-    @JoinColumn(name = "option_id", nullable = false)
-    private ReviewOptions reviewOption;
+    @JoinColumn(name = "package_id", nullable = false)
+    private Package pack;
 }
 

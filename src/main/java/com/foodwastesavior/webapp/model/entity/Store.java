@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Stores")
-public class Stores {
+@Table(name = "Store")
+public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,14 +52,14 @@ public class Stores {
 
     // Packages (additional)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private List<Packages> packages;
+    private List<Package> packages;
 
-    // Orders
+    // Order
     @OneToMany(mappedBy = "store")
-    private List<Orders> orders;
+    private List<Order> orders;
 
-    // Reviews
+    // Review
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private List<Reviews> reviews;
+    private List<Review> reviews;
 }
 

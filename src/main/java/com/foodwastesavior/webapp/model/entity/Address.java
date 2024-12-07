@@ -55,15 +55,15 @@ public class Address {
     private LocalDateTime updatedAt;
 
     // ========== Define Relation Table ========== //
-    // Users
+    // User
     @OneToOne
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
-    // Stores
+    // Store
     @OneToOne
     @JoinColumn(name = "store_id")
-    private Stores store;
+    private Store store;
 
     // ========== Create AddressType enum Class ========== //
     public enum AddressType {

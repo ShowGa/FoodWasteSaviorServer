@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Orders")
-public class Orders {
+@Table(name = "Order")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,15 +49,15 @@ public class Orders {
     // ========== Define Relation Table ========== //
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "package_id", nullable = false)
-    private Packages pack;
+    private Package pack;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
-    private Stores store;
+    private Store store;
 
     // ========== Create OrderStatus enum Class ========= //
     public enum OrderStatus {
