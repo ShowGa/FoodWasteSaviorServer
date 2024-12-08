@@ -41,11 +41,11 @@ public class User {
 
     // ========== Define Relation Table ========== //
     // address
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Address address;
 
     // Order
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Order> orders;
 
     // Favorite
@@ -53,6 +53,6 @@ public class User {
     private List<Favorite> favorites;
 
     // Review
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 }

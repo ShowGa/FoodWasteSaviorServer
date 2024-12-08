@@ -47,7 +47,7 @@ public class Store {
 
     // ========== Define Relation Table ========== //
     // Address
-    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Address address;
 
     // Packages (additional)
@@ -55,7 +55,7 @@ public class Store {
     private List<Package> packages;
 
     // Order
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Order> orders;
 
     // Review
