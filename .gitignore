@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# 忽略 Firebase Admin SDK 的 JSON 金鑰文件
+foodwastesavior-firebase-adminsdk-fiu5y-46643389df.json
