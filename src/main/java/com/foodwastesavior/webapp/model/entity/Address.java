@@ -21,25 +21,27 @@ public class Address {
     @Column(name = "address_id")
     private Integer addressId;
 
-    @Column(name = "address_detail", nullable = false, length = 255)
+    // Nullable for default
+    @Column(name = "address_detail", length = 255)
     private String addressDetail;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String country;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String state;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String city;
 
-    @Column(name = "postal_code", nullable = false, length = 20)
+    // Nullable for default
+    @Column(name = "postal_code", length = 20)
     private String postalCode;
 
-    @Column(nullable = false, precision = 9, scale = 6)
+    @Column(nullable = false)
     private Double latitude;
 
-    @Column(nullable = false, precision = 9, scale = 6)
+    @Column(nullable = false)
     private Double longitude;
 
     @Column(nullable = false, length = 10)

@@ -1,5 +1,6 @@
 package com.foodwastesavior.webapp.service.impl;
 
+import com.foodwastesavior.webapp.model.entity.Address;
 import com.foodwastesavior.webapp.repository.AddressRepository;
 import com.foodwastesavior.webapp.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;

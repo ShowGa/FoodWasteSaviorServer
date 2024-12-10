@@ -1,0 +1,3 @@
+ - add the Global JwtException
+
+ - deal with the FirebaseException later

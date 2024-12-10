@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Order")
+@Table(name = "Order_table")
 public class Order {
 
     @Id
@@ -29,7 +29,7 @@ public class Order {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_price", nullable = false, precision = 10)
     private Double totalPrice;
 
     @Column(name = "confirmation_code", unique = true, length = 50)
