@@ -1,5 +1,7 @@
-package com.foodwastesavior.webapp.security;
+package com.foodwastesavior.webapp.utils;
 
+import com.foodwastesavior.webapp.exception.TokenValidationException;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +14,7 @@ public class JwtUtil {
 
     // set into the safe place
     // need 32 characters
-    private static final String SECRET_KEY = "mySecretKey";
+    private static final String SECRET_KEY = Dotenv.load().get("SECRET_KEY_JWT");
 
     private static Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -29,12 +31,16 @@ public class JwtUtil {
     }
 
     ////////// add exception later
-    public static Claims validateToken(String token) throws JwtException {
-
+    public static Claims validateToken(String token) {
+        try {
             return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+        } catch (JwtException e) {
+            throw new TokenValidationException("Invalid or expired Jwt Token", e);
+        }
+
     }
 }

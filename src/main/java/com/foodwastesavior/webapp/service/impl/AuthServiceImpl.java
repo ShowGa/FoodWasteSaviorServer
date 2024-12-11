@@ -4,12 +4,11 @@ import com.foodwastesavior.webapp.model.entity.Address;
 import com.foodwastesavior.webapp.model.entity.User;
 import com.foodwastesavior.webapp.repository.UserRepository;
 import com.foodwastesavior.webapp.response.LoginResponse;
-import com.foodwastesavior.webapp.security.JwtUtil;
+import com.foodwastesavior.webapp.utils.FirebaseHelper;
+import com.foodwastesavior.webapp.utils.FirebaseHelper.FirebaseUserInfo;
+import com.foodwastesavior.webapp.utils.JwtUtil;
 import com.foodwastesavior.webapp.service.AuthService;
 import com.foodwastesavior.webapp.service.UserService;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,44 +19,36 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
+    private final FirebaseHelper firebaseHelper;
+
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, UserService userService) {
+    public AuthServiceImpl(UserRepository userRepository, UserService userService, FirebaseHelper firebaseHelper) {
         this.userRepository = userRepository;
+        this.firebaseHelper = firebaseHelper;
     }
 
     @Override
-    public LoginResponse googleOAuth(String idToken) throws FirebaseAuthException {
+    public LoginResponse googleOAuth(String idToken)  {
         /* ======= verify the token first from client first ====== */
-        // check if the token is there (Do Later)
 
         // decoded the token with firebase admin sdk
-
-
         // verify token to firebase server and extract info
-        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
-        String email = decodedToken.getEmail();
-        String avatar = decodedToken.getPicture();
-        String username = decodedToken.getName();
+        FirebaseUserInfo userInfo = firebaseHelper.verifyToken(idToken);
 
         // ======= OAuth User login Logic =======//
-        Optional<User> foundedUserOpt = userRepository.findByEmail(email);
 
-        if (foundedUserOpt.isEmpty()) {
-            User savedUser = createAndSaveUserGoogleOAuth(email, avatar, username);
+        // not found than generate new user
+        User user = userRepository.findByEmail(userInfo.getEmail())
+                .orElseGet(() -> createAndSaveUserGoogleOAuth(
+                        userInfo.getEmail(),
+                        userInfo.getAvatarUrl(),
+                        userInfo.getUsername()
+                ));
 
-            // sign token
-            String jwtToken = JwtUtil.generateToken(savedUser.getEmail(), 30);
 
-            // Create
+        String jwtToken = JwtUtil.generateToken(user.getEmail(), 30);
 
-            return new LoginResponse(jwtToken, savedUser.getUserId(), savedUser.getEmail(), savedUser.getAvatarUrl());
-
-        } else {
-            String jwtToken = JwtUtil.generateToken(foundedUserOpt.get().getEmail(), 30);
-
-            return new LoginResponse(jwtToken, foundedUserOpt.get().getUserId(), foundedUserOpt.get().getEmail(), foundedUserOpt.get().getAvatarUrl());
-
-        }
+        return new LoginResponse(jwtToken, user.getUserId(), user.getEmail(), user.getAvatarUrl());
     }
 
     /* =============== private method =============== */

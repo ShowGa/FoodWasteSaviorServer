@@ -4,5 +4,5 @@ import com.foodwastesavior.webapp.response.LoginResponse;
 
 public interface AuthService {
 
-    LoginResponse googleOAuth (String idToken) throws Exception;
+    LoginResponse googleOAuth (String idToken);
 }
