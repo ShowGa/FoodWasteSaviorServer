@@ -11,6 +11,7 @@ public class LoginResponse {
     private String jwt;
 
     private Integer userId;
+    private String username;
     private String email;
     private String avatarUrl;
 }
