@@ -36,7 +36,7 @@ public class Address {
 
     // Nullable for default
     @Column(name = "postal_code", length = 20)
-    private String postalCode;
+    private Integer postalCode;
 
     @Column(nullable = false)
     private Double latitude;

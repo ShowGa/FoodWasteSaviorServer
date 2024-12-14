@@ -1,9 +1,11 @@
 package com.foodwastesavior.webapp.exception;
 
 import com.foodwastesavior.webapp.response.ApiResponse;
+import com.google.api.Http;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuthException;
 import io.jsonwebtoken.JwtException;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    /* ============= Global Exception ============= */
+    /* ============= Common Exception ============= */
 
 
     /* ============== Other exception ============== */
@@ -33,6 +35,15 @@ public class GlobalExceptionHandler {
         ApiResponse<String> res = ApiResponse.error(status.value(), "Token Invalid !");
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+    }
+
+    @ExceptionHandler(ExistedException.class)
+    public ResponseEntity<ApiResponse<String>> handleExistedException (ExistedException e) {
+        HttpStatus status = HttpStatus.CONFLICT;
+
+        ApiResponse<String> res = ApiResponse.error(status.value(), e.getMessage());
+
+        return ResponseEntity.status(status).body(res);
     }
 
 }

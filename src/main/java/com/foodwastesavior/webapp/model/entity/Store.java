@@ -34,7 +34,7 @@ public class Store {
     @Column(name = "logo_image_url", length = 255)
     private String logoImageUrl;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String about;
 
     @CreationTimestamp
