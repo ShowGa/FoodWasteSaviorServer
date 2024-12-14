@@ -46,4 +46,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(res);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleNotFoundException (ExistedException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ApiResponse<String> res = ApiResponse.error(status.value(), e.getMessage());
+
+        return ResponseEntity.status(status).body(res);
+    }
+
 }

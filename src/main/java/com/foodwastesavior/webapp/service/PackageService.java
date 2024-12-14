@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface PackageService {
     MyStoreDashboardPackageCardResponse createNewPackage (String jwt);
+
+    List<MyStoreDashboardPackageCardResponse> getAllMyStorePackageList(String jwt);
 }
 

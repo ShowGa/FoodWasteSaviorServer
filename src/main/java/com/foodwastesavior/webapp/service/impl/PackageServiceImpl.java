@@ -1,5 +1,6 @@
 package com.foodwastesavior.webapp.service.impl;
 
+import com.foodwastesavior.webapp.exception.NotFoundException;
 import com.foodwastesavior.webapp.model.entity.Package;
 import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
 import com.foodwastesavior.webapp.model.entity.Store;
@@ -14,7 +15,9 @@ import jakarta.persistence.EnumType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PackageServiceImpl implements PackageService {
@@ -31,6 +34,7 @@ public class PackageServiceImpl implements PackageService {
         this.psr = psr;
     }
 
+    /* ========================== store ========================== */
     @Override
     public MyStoreDashboardPackageCardResponse createNewPackage(String jwt) {
         // verify token first
@@ -64,4 +68,24 @@ public class PackageServiceImpl implements PackageService {
 
         return new MyStoreDashboardPackageCardResponse(savedPack.getPackageId(), savedPack.getName());
     }
+
+    @Override
+    public List<MyStoreDashboardPackageCardResponse> getAllMyStorePackageList(String jwt) {
+        // verify token first
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get store info
+        Store foundStore = storeRepository.findByEmail(subjectInfo).get();
+
+        // get all packages
+        List<MyStoreDashboardPackageCardResponse> foundedPackages = packageRepository.getAllMyStorePackageList(foundStore.getStoreId());
+
+        if (foundedPackages.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return foundedPackages;
+    }
+
+
 }
