@@ -11,7 +11,6 @@ import com.foodwastesavior.webapp.response.RegisterMyStoreResponse;
 import com.foodwastesavior.webapp.service.AuthMyStoreService;
 import com.foodwastesavior.webapp.utils.FirebaseHelper;
 import com.foodwastesavior.webapp.utils.FirebaseHelper.FirebaseUserInfo;
-import com.foodwastesavior.webapp.utils.JwtTokenInfo;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

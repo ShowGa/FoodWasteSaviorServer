@@ -31,13 +31,16 @@ public class JwtUtil {
     }
 
     ////////// add exception later
-    public static Claims validateToken(String token) {
+    public static String validateToken(String token) {
         try {
-            return Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+            return claims.getSubject();
+
         } catch (JwtException e) {
             throw new TokenValidationException("Invalid or expired Jwt Token", e);
         }
