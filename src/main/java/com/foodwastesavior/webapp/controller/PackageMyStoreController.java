@@ -2,6 +2,7 @@ package com.foodwastesavior.webapp.controller;
 
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
+import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
 import com.foodwastesavior.webapp.service.PackageService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,14 @@ public class PackageMyStoreController {
         }
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found Package Successfully !", msdpcrS));
+    }
+
+    @GetMapping("/packageoverview/{packageId}")
+    public ResponseEntity<ApiResponse<MyStorePackageDetailRes>> getMyStorePackageOverview (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId) {
+        String jwt = authorizationHeader.substring(7);
+
+        MyStorePackageDetailRes mspdr = packageService.getMyStorePackageOverview(jwt, packageId);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", mspdr));
     }
 }

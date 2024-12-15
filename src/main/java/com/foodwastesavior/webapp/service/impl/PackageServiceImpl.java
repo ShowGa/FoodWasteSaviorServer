@@ -90,5 +90,28 @@ public class PackageServiceImpl implements PackageService {
         return foundedPackages;
     }
 
+    @Override
+    public MyStorePackageDetailRes getMyStorePackageOverview(String jwt, Integer packageId) {
+
+        // verify token first
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // find package
+        Package foundPackage = packageRepository.findById(packageId).orElseThrow(() -> new NotFoundException("糟糕!找不到您要得驚喜包 !"));
+
+        // Convert Package to MyStorePackageDetailRes
+        return new MyStorePackageDetailRes(
+                foundPackage.getPackageId(),
+                foundPackage.getName(),
+                foundPackage.getCoverImageUrl(),
+                foundPackage.getDescription(),
+                foundPackage.getAllergensDesc(),
+                foundPackage.getCategory(),
+                foundPackage.getOriginPrice(),
+                foundPackage.getDiscountPrice(),
+                foundPackage.getIsActive()
+        );
+    }
+
 
 }

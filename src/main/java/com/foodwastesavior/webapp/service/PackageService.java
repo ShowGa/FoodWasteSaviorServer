@@ -10,5 +10,7 @@ public interface PackageService {
     MyStoreDashboardPackageCardResponse createNewPackage (String jwt);
 
     List<MyStoreDashboardPackageCardResponse> getAllMyStorePackageList(String jwt);
+
+    MyStorePackageDetailRes getMyStorePackageOverview (String jwt, Integer packageId);
 }
 
