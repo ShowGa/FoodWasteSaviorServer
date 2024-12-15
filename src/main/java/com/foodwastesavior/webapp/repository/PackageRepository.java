@@ -14,7 +14,7 @@ import java.util.List;
 public interface PackageRepository extends JpaRepository<Package, Integer> {
     //
     @Query(value = """
-        SELECT new com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse(p.packageId, p.name)
+        SELECT new com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse(p.packageId, p.name, p.coverImageUrl, p.category)
         FROM Package p 
         WHERE p.store.storeId = :storeId 
         ORDER BY p.createdAt DESC

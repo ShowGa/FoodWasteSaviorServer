@@ -48,6 +48,7 @@ public class PackageServiceImpl implements PackageService {
 
         Package newPackage = new Package();
         newPackage.setName("驚喜包名字");
+        newPackage.setCoverImageUrl("");
         newPackage.setDescription("請介紹你的驚喜包");
         newPackage.setAllergensDesc("請說明食物是否含有潛在過敏原");
         newPackage.setCategory(Package.Category.MEALS);
@@ -66,7 +67,7 @@ public class PackageServiceImpl implements PackageService {
         Package savedPack = packageRepository.save(newPackage);
 
 
-        return new MyStoreDashboardPackageCardResponse(savedPack.getPackageId(), savedPack.getName());
+        return new MyStoreDashboardPackageCardResponse(savedPack.getPackageId(), savedPack.getName(), savedPack.getCoverImageUrl(), savedPack.getCategory());
     }
 
     @Override
