@@ -3,11 +3,10 @@ package com.foodwastesavior.webapp.controller;
 import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
-import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
 import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.service.PackageService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,10 +52,10 @@ public class PackageMyStoreController {
     }
 
     @GetMapping("/packageoverview/{packageId}")
-    public ResponseEntity<ApiResponse<MyStorePackageDetailRes>> getMyStorePackageOverview (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId) {
+    public ResponseEntity<ApiResponse<PackageDetailRes>> getMyStorePackageOverview (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId) {
         String jwt = authorizationHeader.substring(7);
 
-        MyStorePackageDetailRes mspdr = packageService.getMyStorePackageOverview(jwt, packageId);
+        PackageDetailRes mspdr = packageService.getMyStorePackageOverview(jwt, packageId);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", mspdr));
     }
@@ -71,10 +70,10 @@ public class PackageMyStoreController {
     }
 
     @PostMapping("/updatepackageoverview/{packageId}")
-    public ResponseEntity<ApiResponse<MyStorePackageDetailRes>> updateMyStorePackageOverview (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId ,@RequestBody MyStorePackageDetailReq mspdReq) {
+    public ResponseEntity<ApiResponse<PackageDetailRes>> updateMyStorePackageOverview (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId , @RequestBody MyStorePackageDetailReq mspdReq) {
         String jwt = authorizationHeader.substring(7);
 
-        MyStorePackageDetailRes mspdr = packageService.updateMyStorePackageOverview(jwt, packageId, mspdReq);
+        PackageDetailRes mspdr = packageService.updateMyStorePackageOverview(jwt, packageId, mspdReq);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", mspdr));
     }

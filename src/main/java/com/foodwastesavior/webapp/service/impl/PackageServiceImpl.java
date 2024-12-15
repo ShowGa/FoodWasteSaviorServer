@@ -8,19 +8,15 @@ import com.foodwastesavior.webapp.repository.PackageRepository;
 import com.foodwastesavior.webapp.repository.StoreRepository;
 import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
-import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
-import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.service.PackageService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
-import io.jsonwebtoken.Claims;
-import jakarta.persistence.EnumType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PackageServiceImpl implements PackageService {
@@ -92,7 +88,7 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public MyStorePackageDetailRes getMyStorePackageOverview(String jwt, Integer packageId) {
+    public PackageDetailRes getMyStorePackageOverview(String jwt, Integer packageId) {
 
         // verify token first
         String subjectInfo = JwtUtil.validateToken(jwt);
@@ -101,7 +97,7 @@ public class PackageServiceImpl implements PackageService {
         Package foundPackage = packageRepository.findById(packageId).orElseThrow(() -> new NotFoundException("糟糕!找不到您要得驚喜包 !"));
 
         // Convert Package to MyStorePackageDetailRes
-        return new MyStorePackageDetailRes(
+        return new PackageDetailRes(
                 foundPackage.getPackageId(),
                 foundPackage.getName(),
                 foundPackage.getCoverImageUrl(),
@@ -115,7 +111,7 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public MyStorePackageDetailRes updateMyStorePackageOverview(String jwt, Integer packageId, MyStorePackageDetailReq mspdReq) {
+    public PackageDetailRes updateMyStorePackageOverview(String jwt, Integer packageId, MyStorePackageDetailReq mspdReq) {
         // Verify token and extract subject information
         String subjectInfo = JwtUtil.validateToken(jwt);
 
@@ -137,7 +133,7 @@ public class PackageServiceImpl implements PackageService {
         Package updatedPackage = packageRepository.save(foundPackage);
 
         // Convert the updated entity into a response DTO
-        return new MyStorePackageDetailRes(
+        return new PackageDetailRes(
                 updatedPackage.getPackageId(),
                 updatedPackage.getName(),
                 updatedPackage.getCoverImageUrl(),
