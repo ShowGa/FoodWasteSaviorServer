@@ -6,6 +6,7 @@ import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
 import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.repository.PackageRepository;
 import com.foodwastesavior.webapp.repository.StoreRepository;
+import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
 import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
@@ -112,6 +113,43 @@ public class PackageServiceImpl implements PackageService {
                 foundPackage.getIsActive()
         );
     }
+
+    @Override
+    public MyStorePackageDetailRes updateMyStorePackageOverview(String jwt, Integer packageId, MyStorePackageDetailReq mspdReq) {
+        // Verify token and extract subject information
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // Find the package by ID
+        Package foundPackage = packageRepository.findById(packageId)
+                .orElseThrow(() -> new NotFoundException("糟糕!找不到您的驚喜包，無法更新!"));
+
+        // Update package data with the new values from the request
+        foundPackage.setName(mspdReq.getPackageName());
+        foundPackage.setCoverImageUrl(mspdReq.getPackageCoverImageUrl());
+        foundPackage.setDescription(mspdReq.getPackageDescription());
+        foundPackage.setAllergensDesc(mspdReq.getPackageAllergensDesc());
+        foundPackage.setCategory(mspdReq.getPackageCategory());
+        foundPackage.setOriginPrice(mspdReq.getOriginPrice());
+        foundPackage.setDiscountPrice(mspdReq.getDiscountPrice());
+        foundPackage.setIsActive(mspdReq.getIsActive());
+
+        // Save the updated entity
+        Package updatedPackage = packageRepository.save(foundPackage);
+
+        // Convert the updated entity into a response DTO
+        return new MyStorePackageDetailRes(
+                updatedPackage.getPackageId(),
+                updatedPackage.getName(),
+                updatedPackage.getCoverImageUrl(),
+                updatedPackage.getDescription(),
+                updatedPackage.getAllergensDesc(),
+                updatedPackage.getCategory(),
+                updatedPackage.getOriginPrice(),
+                updatedPackage.getDiscountPrice(),
+                updatedPackage.getIsActive()
+        );
+    }
+
 
 
 }
