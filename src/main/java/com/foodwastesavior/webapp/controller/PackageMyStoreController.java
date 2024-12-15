@@ -3,6 +3,8 @@ package com.foodwastesavior.webapp.controller;
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
+import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.service.PackageService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,12 @@ import java.util.List;
 public class PackageMyStoreController {
 
     PackageService packageService;
+    PackageSalesRulesService packageSalesRulesService;
 
     @Autowired
-    public PackageMyStoreController(PackageService packageService) {
+    public PackageMyStoreController(PackageService packageService, PackageSalesRulesService packageSalesRulesService) {
         this.packageService = packageService;
+        this.packageSalesRulesService = packageSalesRulesService;
     }
 
     // mystore create package route
@@ -54,5 +58,14 @@ public class PackageMyStoreController {
         MyStorePackageDetailRes mspdr = packageService.getMyStorePackageOverview(jwt, packageId);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", mspdr));
+    }
+
+    @GetMapping("/packageschedule/{packageId}")
+    public ResponseEntity<ApiResponse<List<PackageSalesRulesRes>>> getMyStorePackageSchedules (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer packageId) {
+        String jwt = authorizationHeader.substring(7);
+
+        List<PackageSalesRulesRes> packageSalesRules = packageSalesRulesService.getMyStorePackageSchedules(jwt, packageId);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", packageSalesRules));
     }
 }

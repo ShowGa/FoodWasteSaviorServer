@@ -1,16 +1,30 @@
 package com.foodwastesavior.webapp.service.impl;
 
+import com.foodwastesavior.webapp.exception.NotFoundException;
 import com.foodwastesavior.webapp.model.entity.Package;
 import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
+import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
+import com.foodwastesavior.webapp.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PackageSalesRulesServiceImpl implements PackageSalesRulesService {
+
+    private PackageSalesRuleRepository packageSalesRuleRepository;
+
+    @Autowired
+    public PackageSalesRulesServiceImpl(PackageSalesRuleRepository psrR) {
+        this.packageSalesRuleRepository = psrR;
+    }
 
     @Override
     public List<PackageSalesRule> createAllPackageSalesRule(Package newPackage) {
@@ -27,4 +41,22 @@ public class PackageSalesRulesServiceImpl implements PackageSalesRulesService {
 
         return salesRules;
     }
+
+    @Override
+    public List<PackageSalesRulesRes> getMyStorePackageSchedules(String jwt, Integer packageId) {
+        // verify token first
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // find package
+        List<PackageSalesRulesRes> salesRulesRes = packageSalesRuleRepository.findByPackPackageId(packageId).stream().map(rule -> new PackageSalesRulesRes(
+                        rule.getRulesId(),
+                        rule.getWeekday(),
+                        rule.getQuantity(),
+                        rule.getPickupStartTime(),
+                        rule.getPickupEndTime(),
+                        rule.getIsActive()
+                ))
+                .toList();
+
+        return salesRulesRes;}
 }
