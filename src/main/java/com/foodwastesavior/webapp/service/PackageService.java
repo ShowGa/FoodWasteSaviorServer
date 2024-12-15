@@ -2,6 +2,7 @@ package com.foodwastesavior.webapp.service;
 
 import com.foodwastesavior.webapp.model.entity.Package;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
+import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
 
 import java.util.List;
 

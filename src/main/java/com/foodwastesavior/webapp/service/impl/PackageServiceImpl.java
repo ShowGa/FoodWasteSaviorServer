@@ -7,6 +7,8 @@ import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.repository.PackageRepository;
 import com.foodwastesavior.webapp.repository.StoreRepository;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
+import com.foodwastesavior.webapp.response.packagesResponse.MyStorePackageDetailRes;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.service.PackageService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
