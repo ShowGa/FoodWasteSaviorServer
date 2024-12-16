@@ -5,4 +5,6 @@ import com.foodwastesavior.webapp.response.RegisterMyStoreResponse;
 
 public interface AuthMyStoreService {
     RegisterMyStoreResponse googleOAuthMyStore(RegisterMyStoreRequest registerMyStoreRequest);
+
+    RegisterMyStoreResponse googleOAuthMyStoreLogin(String jwt);
 }

@@ -9,10 +9,7 @@ import com.foodwastesavior.webapp.service.AuthMyStoreService;
 import com.foodwastesavior.webapp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api-mystore/auth")  // 設定路徑為 api/auth
@@ -36,5 +33,14 @@ public class AuthMyStoreController {
 
         return ResponseEntity.ok(ApiResponse.success(201, "Create Store Successfully !", rR));
 
+    }
+
+    @GetMapping("/googleoauth-login")
+    public ResponseEntity<ApiResponse<RegisterMyStoreResponse>> googleOAuthMyStoreLogin(@RequestHeader("Authorization") String authorizationHeader) {
+        String idToken = authorizationHeader.substring(7);
+
+        RegisterMyStoreResponse rR = authMyStoreService.googleOAuthMyStoreLogin(idToken);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Create Store Successfully !", rR));
     }
 }

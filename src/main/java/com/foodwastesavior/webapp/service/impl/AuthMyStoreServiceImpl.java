@@ -1,6 +1,7 @@
 package com.foodwastesavior.webapp.service.impl;
 
 import com.foodwastesavior.webapp.exception.ExistedException;
+import com.foodwastesavior.webapp.exception.NotFoundException;
 import com.foodwastesavior.webapp.model.entity.Address;
 import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.model.entity.User;
@@ -55,6 +56,23 @@ public class AuthMyStoreServiceImpl implements AuthMyStoreService {
         String jwtToken = JwtUtil.generateToken(store.getEmail(), 30);
 
         return new RegisterMyStoreResponse(jwtToken, store.getStoreId(), store.getName(), store.getLogoImageUrl());
+    }
+
+    @Override
+    public RegisterMyStoreResponse googleOAuthMyStoreLogin(String idToken) {
+        // verify firebase token
+        FirebaseUserInfo firebaseInfo = firebaseHelper.verifyToken(idToken);
+
+        // ========= login logic ========= //
+        Store foundstore = storeRepository.findByEmail(firebaseInfo.getEmail()).orElseThrow(() -> new NotFoundException("您尚未註冊商店"));
+
+        // sign token
+        String jwtToken = JwtUtil.generateToken(foundstore.getEmail(), 30);
+
+        // convert foundstore to response than return
+        return new RegisterMyStoreResponse(jwtToken, foundstore.getStoreId(), foundstore.getName(), foundstore.getLogoImageUrl());
+
+
     }
 
     /* =============== private method =============== */
