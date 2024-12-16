@@ -29,9 +29,6 @@ public class Address {
     private String country;
 
     @Column(length = 100)
-    private String state;
-
-    @Column(length = 100)
     private String city;
 
     // Nullable for default
