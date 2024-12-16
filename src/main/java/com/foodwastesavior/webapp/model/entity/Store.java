@@ -37,6 +37,15 @@ public class Store {
     @Column(columnDefinition = "TEXT")
     private String about;
 
+    @Column(name = "rating_sum", columnDefinition = "DOUBLE DEFAULT 0.0")
+    private Double ratingSum;
+
+    @Column(name = "rating_count", columnDefinition = "INT DEFAULT 0")
+    private Integer ratingCount;
+
+    @Column(name = "rating", columnDefinition = "DECIMAL(2, 1) DEFAULT 0.0")
+    private Double rating;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

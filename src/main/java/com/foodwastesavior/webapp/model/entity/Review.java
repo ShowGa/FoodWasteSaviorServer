@@ -20,8 +20,9 @@ public class Review {
     @Column(name = "review_id")
     private Integer reviewId;
 
-    @Column(nullable = false)
-    private int rating; // Check Rating in service 1 - 5
+    @Column(nullable = false, columnDefinition = "DECIMAL(2, 1) CHECK (rating BETWEEN 1.0 AND 5.0)")
+    private Double rating;
+
 
 
     @CreationTimestamp
