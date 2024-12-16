@@ -1,6 +1,7 @@
 package com.foodwastesavior.webapp.controller;
 
 import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
+import com.foodwastesavior.webapp.request.MyStorePackageSalesRuleReq;
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
 import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
@@ -78,4 +79,12 @@ public class PackageMyStoreController {
         return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", mspdr));
     }
 
+    @PostMapping("/updatepackageschedule/{rulesId}")
+    public ResponseEntity<ApiResponse<PackageSalesRulesRes>> updateMyStorePackageSchedule (@RequestHeader("Authorization") String authorizationHeader, @PathVariable Integer rulesId , @RequestBody MyStorePackageSalesRuleReq mspsrReq) {
+        String jwt = authorizationHeader.substring(7);
+
+        PackageSalesRulesRes psrR = packageSalesRulesService.updateMyStorePackageSchedule(jwt, rulesId, mspsrReq);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found Package Sucessfully !", psrR));
+    }
 }

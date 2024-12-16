@@ -4,6 +4,8 @@ import com.foodwastesavior.webapp.exception.NotFoundException;
 import com.foodwastesavior.webapp.model.entity.Package;
 import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
 import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
+import com.foodwastesavior.webapp.request.MyStorePackageSalesRuleReq;
+import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
 import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
@@ -59,4 +61,35 @@ public class PackageSalesRulesServiceImpl implements PackageSalesRulesService {
                 .toList();
 
         return salesRulesRes;}
+
+    @Override
+    public PackageSalesRulesRes updateMyStorePackageSchedule(String jwt, Integer rulesId, MyStorePackageSalesRuleReq mspsrR) {
+        // Verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // Find the PackageSalesRule by rulesId
+        PackageSalesRule foundRule = packageSalesRuleRepository.findById(rulesId)
+                .orElseThrow(() -> new NotFoundException("糟糕! 找不到這個銷售規則，無法更新!"));
+
+        // Update the fields of the found PackageSalesRule
+        foundRule.setWeekday(mspsrR.getWeekday());
+        foundRule.setQuantity(mspsrR.getQuantity());
+        foundRule.setPickupStartTime(mspsrR.getPickupStartTime());
+        foundRule.setPickupEndTime(mspsrR.getPickupEndTime());
+        foundRule.setIsActive(mspsrR.getIsActive());
+
+        // Save the updated PackageSalesRule
+        PackageSalesRule updatedRule = packageSalesRuleRepository.save(foundRule);
+
+        // Convert the updated entity into a response DTO
+        return new PackageSalesRulesRes(
+                updatedRule.getRulesId(),
+                updatedRule.getWeekday(),
+                updatedRule.getQuantity(),
+                updatedRule.getPickupStartTime(),
+                updatedRule.getPickupEndTime(),
+                updatedRule.getIsActive()
+        );
+    }
+
 }
