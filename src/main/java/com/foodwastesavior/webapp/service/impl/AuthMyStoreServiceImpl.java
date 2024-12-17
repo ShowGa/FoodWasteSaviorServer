@@ -82,8 +82,13 @@ public class AuthMyStoreServiceImpl implements AuthMyStoreService {
 
         Store newStore = new Store();
         newStore.setEmail(email);
+        newStore.setCoverImageUrl("");
+        newStore.setLogoImageUrl("");
         newStore.setName(storename);
         newStore.setLogoImageUrl(avatar);
+        newStore.setRatingSum(0.0);
+        newStore.setRatingCount(0);
+        newStore.setRating(0.0);
 
         Address newAddress = new Address();
         newAddress.setAddressDetail(addressInfo.getAddressDetail());
