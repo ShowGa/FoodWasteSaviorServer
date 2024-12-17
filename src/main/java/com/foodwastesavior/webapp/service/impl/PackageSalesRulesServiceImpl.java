@@ -5,8 +5,7 @@ import com.foodwastesavior.webapp.model.entity.Package;
 import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
 import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
 import com.foodwastesavior.webapp.request.MyStorePackageSalesRuleReq;
-import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
-import com.foodwastesavior.webapp.response.packagesResponse.PackageSalesRulesRes;
+import com.foodwastesavior.webapp.response.MyStorePackagesResponse.PackageSalesRulesRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PackageSalesRulesServiceImpl implements PackageSalesRulesService {

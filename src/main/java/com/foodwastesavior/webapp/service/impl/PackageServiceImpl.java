@@ -7,8 +7,9 @@ import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.repository.PackageRepository;
 import com.foodwastesavior.webapp.repository.StoreRepository;
 import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
-import com.foodwastesavior.webapp.response.packagesResponse.MyStoreDashboardPackageCardResponse;
-import com.foodwastesavior.webapp.response.packagesResponse.PackageDetailRes;
+import com.foodwastesavior.webapp.response.MyStorePackagesResponse.MyStoreDashboardPackageCardResponse;
+import com.foodwastesavior.webapp.response.MyStorePackagesResponse.PackageDetailRes;
+import com.foodwastesavior.webapp.response.packageRes.StoreDetailPackageCardRes;
 import com.foodwastesavior.webapp.service.PackageSalesRulesService;
 import com.foodwastesavior.webapp.service.PackageService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
@@ -146,6 +147,14 @@ public class PackageServiceImpl implements PackageService {
         );
     }
 
+    @Override
+    public List<StoreDetailPackageCardRes> findStoreDetailPackageCard(String jwt, Integer storeId) {
+        // Verify token and extract subject information
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // find package and sales rules
+        return packageRepository.findPackagesByStoreId(storeId);
+    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.foodwastesavior.webapp.response.packagesResponse;
+package com.foodwastesavior.webapp.response.MyStorePackagesResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
