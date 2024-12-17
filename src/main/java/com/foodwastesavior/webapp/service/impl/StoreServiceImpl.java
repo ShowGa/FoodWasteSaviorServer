@@ -49,7 +49,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StoreDetailRes getStoreDetail(String jwt, Integer storeId) {
         // verify token first
-//        String subjectInfo = JwtUtil.validateToken(jwt);
+        String subjectInfo = JwtUtil.validateToken(jwt);
 
         // get store
         Store foundStore = storeRepository.findById(storeId).orElseThrow(() -> new NotFoundException("糟糕!找不到這家商店資料"));
