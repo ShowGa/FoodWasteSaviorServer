@@ -1,8 +1,11 @@
 package com.foodwastesavior.webapp.service.impl;
 
+import com.foodwastesavior.webapp.exception.NotFoundException;
+import com.foodwastesavior.webapp.model.entity.Address;
 import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.repository.StoreRepository;
 import com.foodwastesavior.webapp.response.storeResponse.SearchCardRes;
+import com.foodwastesavior.webapp.response.storeResponse.StoreDetailRes;
 import com.foodwastesavior.webapp.service.StoreService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<SearchCardRes> findStoreWithDistance(String jwt, Double longitude, Double latitude, Integer radius) {
         // verify token first
-//        String subjectInfo = JwtUtil.validateToken(jwt);
+        String subjectInfo = JwtUtil.validateToken(jwt);
 
         // find the store with distance
         List<Object[]> results = storeRepository.findStoresWithinDistance(longitude, latitude, Double.valueOf(radius));
@@ -41,6 +44,28 @@ public class StoreServiceImpl implements StoreService {
                         ((Number) row[7]).doubleValue()  // distance
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StoreDetailRes getStoreDetail(String jwt, Integer storeId) {
+        // verify token first
+//        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get store
+        Store foundStore = storeRepository.findById(storeId).orElseThrow(() -> new NotFoundException("糟糕!找不到這家商店資料"));
+
+        Address foundAddress = foundStore.getAddress();
+
+        StoreDetailRes storeDetailRes = new StoreDetailRes(foundStore.getStoreId(),
+                foundStore.getName(),
+                foundStore.getCoverImageUrl(),
+                foundStore.getLogoImageUrl(),
+                foundStore.getAbout(),
+                foundStore.getRating(),
+                foundStore.getRatingCount(),
+                foundAddress.getAddressDetail());
+
+        return storeDetailRes;
     }
 }
 
