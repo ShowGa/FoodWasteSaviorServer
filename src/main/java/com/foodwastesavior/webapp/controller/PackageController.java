@@ -2,6 +2,7 @@ package com.foodwastesavior.webapp.controller;
 
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.packageRes.StoreDetailPackageCardRes;
+import com.foodwastesavior.webapp.response.packageRes.UserPackageDetailRes;
 import com.foodwastesavior.webapp.response.storeResponse.SearchCardRes;
 import com.foodwastesavior.webapp.service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class PackageController {
     }
 
     @GetMapping("/storedetail-packagecard/{storeId}")
-    public ResponseEntity<ApiResponse<List<StoreDetailPackageCardRes>>> findStoreWithDistance(
+    public ResponseEntity<ApiResponse<List<StoreDetailPackageCardRes>>> getStoreDetailPackageCard(
             @PathVariable Integer storeId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
@@ -31,5 +32,17 @@ public class PackageController {
         List<StoreDetailPackageCardRes> results = packageService.findStoreDetailPackageCard(jwt, storeId);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Find StoreDetail PackageCard successfully !", results));
+    }
+
+    @GetMapping("/packagedetail/{packageId}")
+    public ResponseEntity<ApiResponse<UserPackageDetailRes>> getPackageDetail(
+            @PathVariable Integer packageId,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        String jwt = authorizationHeader.substring(7);
+
+        UserPackageDetailRes result = packageService.getPackageDetail(jwt, packageId);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Find Package detail successfully !", result));
     }
 }

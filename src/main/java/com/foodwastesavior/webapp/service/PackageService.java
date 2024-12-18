@@ -4,6 +4,7 @@ import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
 import com.foodwastesavior.webapp.response.MyStorePackagesResponse.MyStoreDashboardPackageCardResponse;
 import com.foodwastesavior.webapp.response.MyStorePackagesResponse.PackageDetailRes;
 import com.foodwastesavior.webapp.response.packageRes.StoreDetailPackageCardRes;
+import com.foodwastesavior.webapp.response.packageRes.UserPackageDetailRes;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface PackageService {
 
     // ============== user =============== //
     List<StoreDetailPackageCardRes> findStoreDetailPackageCard(String jwt, Integer storeId);
+
+    UserPackageDetailRes getPackageDetail(String jwt, Integer packageId);
 }
 
