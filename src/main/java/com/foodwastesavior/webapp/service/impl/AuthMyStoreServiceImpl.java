@@ -82,8 +82,7 @@ public class AuthMyStoreServiceImpl implements AuthMyStoreService {
 
         Store newStore = new Store();
         newStore.setEmail(email);
-        newStore.setCoverImageUrl("");
-        newStore.setLogoImageUrl("");
+        newStore.setCoverImageUrl("https://res.cloudinary.com/dcybgix51/image/upload/v1733270354/samples/food/fish-vegetables.jpg");
         newStore.setName(storename);
         newStore.setLogoImageUrl(avatar);
         newStore.setRatingSum(0.0);

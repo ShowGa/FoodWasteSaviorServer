@@ -58,7 +58,7 @@ public class PackageServiceImpl implements PackageService {
 
         Package newPackage = new Package();
         newPackage.setName("驚喜包名字");
-        newPackage.setCoverImageUrl("");
+        newPackage.setCoverImageUrl("https://res.cloudinary.com/dcybgix51/image/upload/v1733270353/samples/food/dessert.jpg");
         newPackage.setDescription("請介紹你的驚喜包");
         newPackage.setAllergensDesc("請說明食物是否含有潛在過敏原");
         newPackage.setCategory(Package.Category.MEALS);
