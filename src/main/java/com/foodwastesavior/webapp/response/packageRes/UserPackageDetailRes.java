@@ -24,4 +24,7 @@ public class UserPackageDetailRes {
     private LocalTime packageEndTime;
     private Integer quantityRemaining;
     private Boolean todayIsActive;
+
+    // favorite
+    private Boolean isFavorite;
 }

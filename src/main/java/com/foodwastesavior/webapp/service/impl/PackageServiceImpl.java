@@ -1,13 +1,9 @@
 package com.foodwastesavior.webapp.service.impl;
 
 import com.foodwastesavior.webapp.exception.NotFoundException;
+import com.foodwastesavior.webapp.model.entity.*;
 import com.foodwastesavior.webapp.model.entity.Package;
-import com.foodwastesavior.webapp.model.entity.PackageSalesRule;
-import com.foodwastesavior.webapp.model.entity.Store;
-import com.foodwastesavior.webapp.repository.OrderRepository;
-import com.foodwastesavior.webapp.repository.PackageRepository;
-import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
-import com.foodwastesavior.webapp.repository.StoreRepository;
+import com.foodwastesavior.webapp.repository.*;
 import com.foodwastesavior.webapp.request.MyStorePackageDetailReq;
 import com.foodwastesavior.webapp.response.MyStorePackagesResponse.MyStoreDashboardPackageCardResponse;
 import com.foodwastesavior.webapp.response.MyStorePackagesResponse.PackageDetailRes;
@@ -31,16 +27,20 @@ public class PackageServiceImpl implements PackageService {
     private final StoreRepository storeRepository;
     private final PackageSalesRuleRepository psrRepo;
     private final OrderRepository orderRepo;
+    private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
 
     private final PackageSalesRulesService psr;
 
     // constructor injection
     @Autowired
-    public PackageServiceImpl(PackageRepository packageRepository, StoreRepository storeRepository, PackageSalesRuleRepository psrRepo, OrderRepository orderRepo, PackageSalesRulesService psr) {
+    public PackageServiceImpl(PackageRepository packageRepository, StoreRepository storeRepository, PackageSalesRuleRepository psrRepo, OrderRepository orderRepo, FavoriteRepository favoriteRepository, UserRepository userRepository, PackageSalesRulesService psr) {
         this.packageRepository = packageRepository;
         this.storeRepository = storeRepository;
         this.psrRepo = psrRepo;
         this.orderRepo = orderRepo;
+        this.favoriteRepository = favoriteRepository;
+        this.userRepository = userRepository;
         this.psr = psr;
     }
 
@@ -190,7 +190,13 @@ public class PackageServiceImpl implements PackageService {
 
         Integer quantityRemaining = foundpsr.getQuantity() - countOfTodayOrder;
 
-        return new UserPackageDetailRes(foundPack.getPackageId(), foundPack.getName(), foundPack.getCoverImageUrl(), foundPack.getDescription(), foundPack.getAllergensDesc(), foundPack.getCategory(), foundPack.getOriginPrice(), foundPack.getDiscountPrice(), foundpsr.getPickupStartTime(), foundpsr.getPickupEndTime(), quantityRemaining, foundpsr.getIsActive());
+        // check is favorite
+        // find user first
+        User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("糟糕!無法辨識使用者!請聯絡我們"));
+        // found favorite
+        Boolean isFavoriteExisted = favoriteRepository.existsByUserIdAndPackageId(foundUser.getUserId(), packageId);
+
+        return new UserPackageDetailRes(foundPack.getPackageId(), foundPack.getName(), foundPack.getCoverImageUrl(), foundPack.getDescription(), foundPack.getAllergensDesc(), foundPack.getCategory(), foundPack.getOriginPrice(), foundPack.getDiscountPrice(), foundpsr.getPickupStartTime(), foundpsr.getPickupEndTime(), quantityRemaining, foundpsr.getIsActive(), isFavoriteExisted);
     }
 
 
