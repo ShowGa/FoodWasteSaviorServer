@@ -2,6 +2,7 @@ package com.foodwastesavior.webapp.repository;
 
 import com.foodwastesavior.webapp.model.entity.Favorite;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,14 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
         WHERE f.user.userId = :userId AND f.pack.packageId = :packageId
     """)
     Boolean existsByUserIdAndPackageId(@Param("userId") Integer userId, @Param("packageId") Integer packageId);
+
+    @Modifying
+    @Query("""
+    DELETE FROM Favorite f
+    WHERE f.user.userId = :userId AND f.pack.packageId = :packageId
+""")
+    void deleteByUserIdAndPackageId(@Param("userId") Integer userId, @Param("packageId") Integer packageId);
+
 
 }
 
