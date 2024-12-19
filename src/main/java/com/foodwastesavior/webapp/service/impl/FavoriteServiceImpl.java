@@ -7,12 +7,16 @@ import com.foodwastesavior.webapp.model.entity.User;
 import com.foodwastesavior.webapp.repository.FavoriteRepository;
 import com.foodwastesavior.webapp.repository.PackageRepository;
 import com.foodwastesavior.webapp.repository.UserRepository;
+import com.foodwastesavior.webapp.response.packageRes.FavoriteCardRes;
 import com.foodwastesavior.webapp.service.FavoriteService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -56,5 +60,23 @@ public class FavoriteServiceImpl implements FavoriteService {
 
             return true;
         }
+    }
+
+    @Override
+    public List<FavoriteCardRes> getUserFavorites(String jwt, Integer userId) {
+        // verify
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get the list of FavoriteCardRes with today sales rules
+        int todayWeekday = LocalDate.now(ZoneId.of("Asia/Taipei")).getDayOfWeek().getValue() % 7;
+
+        List<FavoriteCardRes> foundFavorites = favoriteRepository.findUserFavoritesWithDetails(userId, todayWeekday);
+
+        // check maybe
+        if (foundFavorites.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return foundFavorites;
     }
 }
