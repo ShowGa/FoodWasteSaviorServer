@@ -37,7 +37,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
         s.logoImageUrl,
         psr.pickupStartTime,
         psr.pickupEndTime,
-        psr.isActive
+        psr.isActive,
+        true
     )
     FROM Favorite f
     JOIN f.pack p

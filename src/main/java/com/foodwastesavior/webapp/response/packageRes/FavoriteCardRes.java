@@ -20,5 +20,6 @@ public class FavoriteCardRes {
     private LocalTime pickupStartTime;
     private LocalTime pickupEndTime;
     private Boolean isActive;
+    private Boolean isFavorite;
 
 }
