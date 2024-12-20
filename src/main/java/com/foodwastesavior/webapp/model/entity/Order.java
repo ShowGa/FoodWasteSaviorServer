@@ -24,13 +24,16 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 20)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.WAITFORCONFIRM;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(name = "total_price", nullable = false, precision = 10)
-    private Double totalPrice;
+    private Integer totalPrice;
+
+    @Column(name = "total_discount_price", nullable = false, precision = 10)
+    private Integer totalOriginPrice;
 
     @Column(name = "confirmation_code", unique = true, length = 50)
     private String confirmationCode;

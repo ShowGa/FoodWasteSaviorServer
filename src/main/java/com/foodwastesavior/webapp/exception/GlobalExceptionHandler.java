@@ -55,4 +55,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(res);
     }
 
+    @ExceptionHandler(OutOfStockException.class)
+    public ResponseEntity<ApiResponse<String>> handleOutOfStockException (OutOfStockException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ApiResponse<String> res = ApiResponse.error(status.value(), e.getMessage());
+
+        return ResponseEntity.status(status).body(res);
+    }
+
 }
