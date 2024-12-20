@@ -1,7 +1,7 @@
 package com.foodwastesavior.webapp.repository;
 
 import com.foodwastesavior.webapp.model.entity.Order;
-import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
+import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,6 +36,29 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             WHERE o.user.userId = :userId
             """)
     Optional<Long> countUserSavedMoney(@Param("userId") Integer userId);
+
+    @Query("""
+    SELECT new com.foodwastesavior.webapp.response.orderRes.UserOrderList(
+        o.orderId,
+        o.orderStatus,
+        psr.pickupStartTime,
+        psr.pickupEndTime,
+        s.logoImageUrl,
+        s.name
+    )
+    FROM Order o
+    JOIN o.pack p
+    JOIN p.packageSalesRules psr
+    JOIN p.store s
+    WHERE o.user.userId = :userId
+      AND psr.weekday = :todayWeekday
+      AND o.orderStatus IN ('WAITFORCONFIRM', 'PENDING', 'READY')
+""")
+    List<UserOrderList> findOrdersByUserIdAndWeekday(
+            @Param("userId") Integer userId,
+            @Param("todayWeekday") Integer todayWeekday
+    );
+
 
 }
 

@@ -12,6 +12,7 @@ import com.foodwastesavior.webapp.repository.UserRepository;
 import com.foodwastesavior.webapp.request.CreateOrderReq;
 import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderDetailRes;
+import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import com.foodwastesavior.webapp.service.OrderService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import com.foodwastesavior.webapp.utils.OrderConfirmCodeGenerator;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -123,6 +125,23 @@ public class OrderServiceImpl implements OrderService {
                 todayPsr.getPickupStartTime(),
                 todayPsr.getPickupEndTime()
         );
+    }
+
+    @Override
+    public List<UserOrderList> getUserOrderList(Integer userId, String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get user order with
+        User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("糟糕!沒有找到使用者的資料，取得訂單資料失敗!"));
+
+        int todayWeekday = LocalDate.now(ZoneId.of("Asia/Taipei")).getDayOfWeek().getValue() % 7;
+
+        List<UserOrderList> userOrders = orderRepository.findOrdersByUserIdAndWeekday(foundUser.getUserId(), todayWeekday);
+
+        if (userOrders.isEmpty()) return Collections.emptyList();
+
+        return userOrders;
     }
 
 
