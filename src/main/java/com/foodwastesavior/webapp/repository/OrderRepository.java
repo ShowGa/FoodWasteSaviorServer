@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     //
 
-    @Query("SELECT SUM(o.quantity) FROM Order o " +
+    @Query("SELECT COALESCE(SUM(o.quantity), 0L) FROM Order o " +
             "WHERE o.pack.packageId = :packageId AND o.orderDate = :today")
     Integer countOrdersByPackageIdAndOrderDate(
             @Param("packageId") Integer packageId,
