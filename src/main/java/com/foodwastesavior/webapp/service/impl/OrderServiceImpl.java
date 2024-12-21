@@ -5,15 +5,9 @@ import com.foodwastesavior.webapp.exception.OutOfStockException;
 import com.foodwastesavior.webapp.exception.TokenValidationException;
 import com.foodwastesavior.webapp.model.entity.*;
 import com.foodwastesavior.webapp.model.entity.Package;
-import com.foodwastesavior.webapp.repository.OrderRepository;
-import com.foodwastesavior.webapp.repository.PackageRepository;
-import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
-import com.foodwastesavior.webapp.repository.UserRepository;
+import com.foodwastesavior.webapp.repository.*;
 import com.foodwastesavior.webapp.request.CreateOrderReq;
-import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderDetail;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderDetailRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
+import com.foodwastesavior.webapp.response.orderRes.*;
 import com.foodwastesavior.webapp.service.OrderService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import com.foodwastesavior.webapp.utils.OrderConfirmCodeGenerator;
@@ -35,13 +29,15 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final PackageRepository packageRepository;
     private final PackageSalesRuleRepository psrRepo;
+    private final StoreRepository storeRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, PackageRepository packageRepository, PackageSalesRuleRepository psrRepo) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, PackageRepository packageRepository, PackageSalesRuleRepository psrRepo, StoreRepository storeRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.packageRepository = packageRepository;
         this.psrRepo = psrRepo;
+        this.storeRepository = storeRepository;
     }
 
     @Override
@@ -178,6 +174,24 @@ public class OrderServiceImpl implements OrderService {
 
         return userOrderDetail;
 
+    }
+
+    @Override
+    public List<MyStorePendingOrdersRes> getAllWaitingForConfirmOrdersList(String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get store
+        Store gotStore = storeRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到商家資訊，無法取得訂單!"));
+
+        // get all orders
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Taipei"));
+
+        List<MyStorePendingOrdersRes> foundOrdersList = orderRepository.getAllWaitingForConfirmOrdersList(gotStore.getStoreId(), today);
+
+        if (foundOrdersList.isEmpty()) return Collections.emptyList();
+
+        return foundOrdersList;
     }
 
 

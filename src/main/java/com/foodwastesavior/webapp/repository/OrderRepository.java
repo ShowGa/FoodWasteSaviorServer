@@ -1,6 +1,7 @@
 package com.foodwastesavior.webapp.repository;
 
 import com.foodwastesavior.webapp.model.entity.Order;
+import com.foodwastesavior.webapp.response.orderRes.MyStorePendingOrdersRes;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -73,6 +74,25 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             @Param("userId") Integer userId,
             @Param("orderId") Integer orderId,
             @Param("orderDate") LocalDate orderDate
+    );
+
+    @Query("""
+    SELECT new com.foodwastesavior.webapp.response.orderRes.MyStorePendingOrdersRes(
+        o.orderId,
+        o.confirmationCode,
+        o.quantity,
+        p.name,
+        p.coverImageUrl
+    )
+    FROM Order o
+    JOIN o.pack p
+    WHERE o.store.storeId = :storeId
+      AND o.orderDate = :today
+      AND o.orderStatus = 'WAITFORCONFIRM'
+""")
+    List<MyStorePendingOrdersRes> getAllWaitingForConfirmOrdersList(
+            @Param("storeId") Integer storeId,
+            @Param("today") LocalDate today
     );
 }
 
