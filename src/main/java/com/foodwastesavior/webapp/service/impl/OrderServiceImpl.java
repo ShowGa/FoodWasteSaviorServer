@@ -11,9 +11,11 @@ import com.foodwastesavior.webapp.response.orderRes.*;
 import com.foodwastesavior.webapp.service.OrderService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import com.foodwastesavior.webapp.utils.OrderConfirmCodeGenerator;
+import org.aspectj.weaver.ast.Not;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -192,6 +195,30 @@ public class OrderServiceImpl implements OrderService {
         if (foundOrdersList.isEmpty()) return Collections.emptyList();
 
         return foundOrdersList;
+    }
+
+    @Transactional
+    @Override
+    public String accepttheorder(Integer orderId, String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // getstore
+        Store gotStore = storeRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到商家資訊，無法更新訂單"));
+
+        // get order
+        Order foundOrder = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("沒有找到這個訂單!請聯絡我們。"));
+
+        // check order is belong to store
+        if (!Objects.equals(gotStore.getStoreId(), foundOrder.getStore().getStoreId())) {
+            throw new NotFoundException("沒有找到匹配訂單的資訊，無法更改!");
+        };
+
+        // update the status of order
+        foundOrder.setOrderStatus(Order.OrderStatus.READY);
+        Order savedOrder = orderRepository.save(foundOrder);
+
+        return "成功接受訂單!";
     }
 
 
