@@ -11,6 +11,7 @@ import com.foodwastesavior.webapp.repository.PackageSalesRuleRepository;
 import com.foodwastesavior.webapp.repository.UserRepository;
 import com.foodwastesavior.webapp.request.CreateOrderReq;
 import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
+import com.foodwastesavior.webapp.response.orderRes.UserOrderDetail;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderDetailRes;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import com.foodwastesavior.webapp.service.OrderService;
@@ -135,13 +136,48 @@ public class OrderServiceImpl implements OrderService {
         // get user order with
         User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("糟糕!沒有找到使用者的資料，取得訂單資料失敗!"));
 
-        int todayWeekday = LocalDate.now(ZoneId.of("Asia/Taipei")).getDayOfWeek().getValue() % 7;
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Taipei"));
 
-        List<UserOrderList> userOrders = orderRepository.findOrdersByUserIdAndWeekday(foundUser.getUserId(), todayWeekday);
+        int todayWeekday = today.getDayOfWeek().getValue() % 7;
+
+        List<UserOrderList> userOrders = orderRepository.findOrdersByUserIdAndWeekday(foundUser.getUserId(), today, todayWeekday);
 
         if (userOrders.isEmpty()) return Collections.emptyList();
 
         return userOrders;
+    }
+
+    @Override
+    public UserOrderDetail getUserOrderDetail(Integer orderId, String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Taipei"));
+
+        // get user
+        User gotUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("找不到使用者資訊!"));
+
+        // get order with condition
+        Order foundOrder = orderRepository.findOrderDetailByUserIdAndOrderIdAndOrderDate(gotUser.getUserId(), orderId, today).orElseThrow(() -> new NotFoundException("沒有找到匹配的訂單!"));
+
+        // get store
+        Store gotStore = foundOrder.getStore();
+
+        // get address
+        Address gotAddress = gotStore.getAddress();
+
+        // get package
+        Package gotPack = foundOrder.getPack();
+
+        // get psr
+        int todayWeekday = today.getDayOfWeek().getValue() % 7;
+
+        PackageSalesRule psr = psrRepo.findByPackageIdAndWeekday(gotPack.getPackageId(), todayWeekday).orElseThrow(() -> new NotFoundException("找不到訂單資訊!"));
+
+        UserOrderDetail userOrderDetail = new UserOrderDetail(foundOrder.getOrderId(), foundOrder.getOrderStatus(), foundOrder.getOrderDate(), foundOrder.getTotalPrice(), foundOrder.getQuantity(), gotStore.getStoreId(), gotStore.getLogoImageUrl(), gotStore.getName(), gotAddress.getAddressDetail(), gotAddress.getLatitude(), gotAddress.getLongitude(), gotPack.getName(), gotPack.getCategory(), psr.getPickupStartTime(), psr.getPickupEndTime());
+
+        return userOrderDetail;
+
     }
 
 

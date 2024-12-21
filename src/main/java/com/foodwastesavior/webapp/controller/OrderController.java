@@ -3,6 +3,7 @@ package com.foodwastesavior.webapp.controller;
 import com.foodwastesavior.webapp.request.CreateOrderReq;
 import com.foodwastesavior.webapp.response.ApiResponse;
 import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
+import com.foodwastesavior.webapp.response.orderRes.UserOrderDetail;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderDetailRes;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import com.foodwastesavior.webapp.service.OrderService;
@@ -53,5 +54,14 @@ public class OrderController {
         List<UserOrderList> result = orderService.getUserOrderList(userId, jwt);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found User Order list successfully!", result));
+    }
+
+    @GetMapping("/order-detail/{orderId}")
+    public ResponseEntity<ApiResponse<UserOrderDetail>> getUserOrderDetail(@PathVariable Integer orderId, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwt = authorizationHeader.substring(7);
+
+        UserOrderDetail result = orderService.getUserOrderDetail(orderId, jwt);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found Order Detail Successfully!", result));
     }
 }

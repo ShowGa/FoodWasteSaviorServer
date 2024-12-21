@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
@@ -51,14 +52,27 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     JOIN p.packageSalesRules psr
     JOIN p.store s
     WHERE o.user.userId = :userId
+      AND o.orderDate = :today
       AND psr.weekday = :todayWeekday
       AND o.orderStatus IN ('WAITFORCONFIRM', 'PENDING', 'READY')
 """)
     List<UserOrderList> findOrdersByUserIdAndWeekday(
             @Param("userId") Integer userId,
+            @Param("today") LocalDate today,
             @Param("todayWeekday") Integer todayWeekday
     );
 
-
+    @Query("""
+    SELECT o
+    FROM Order o
+    WHERE o.user.userId = :userId
+      AND o.orderId = :orderId
+      AND o.orderDate = :orderDate
+""")
+    Optional<Order> findOrderDetailByUserIdAndOrderIdAndOrderDate(
+            @Param("userId") Integer userId,
+            @Param("orderId") Integer orderId,
+            @Param("orderDate") LocalDate orderDate
+    );
 }
 
