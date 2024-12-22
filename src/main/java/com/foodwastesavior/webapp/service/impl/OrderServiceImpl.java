@@ -169,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
 
         PackageSalesRule psr = psrRepo.findByPackageIdAndWeekday(gotPack.getPackageId(), todayWeekday).orElseThrow(() -> new NotFoundException("找不到訂單資訊!"));
 
-        UserOrderDetail userOrderDetail = new UserOrderDetail(foundOrder.getOrderId(), foundOrder.getOrderStatus(), foundOrder.getOrderDate(), foundOrder.getTotalPrice(), foundOrder.getQuantity(), gotStore.getStoreId(), gotStore.getLogoImageUrl(), gotStore.getName(), gotAddress.getAddressDetail(), gotAddress.getLatitude(), gotAddress.getLongitude(), gotPack.getName(), gotPack.getCategory(), psr.getPickupStartTime(), psr.getPickupEndTime());
+        UserOrderDetail userOrderDetail = new UserOrderDetail(foundOrder.getOrderId(), foundOrder.getOrderStatus(), foundOrder.getOrderDate(), foundOrder.getTotalPrice(), foundOrder.getQuantity(), foundOrder.getConfirmationCode(),gotStore.getStoreId(), gotStore.getLogoImageUrl(), gotStore.getName(), gotAddress.getAddressDetail(), gotAddress.getLatitude(), gotAddress.getLongitude(), gotPack.getName(), gotPack.getCategory(), psr.getPickupStartTime(), psr.getPickupEndTime());
 
         return userOrderDetail;
 

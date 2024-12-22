@@ -17,6 +17,7 @@ public class UserOrderDetail {
     private LocalDate orderDate;
     private Integer orderTotalPrice;
     private Integer orderQuantity;
+    private String orderConfirmCode;
 
     // Store Information
     private Integer storeId;
