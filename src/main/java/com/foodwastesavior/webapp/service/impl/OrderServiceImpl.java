@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         // calculate the order amount and write logic
         Integer countExistedOrders = orderRepository.countOrdersByPackageIdAndOrderDate(createOrderReq.getPackageId(), nowdate);
 
-        if (todayPsr.getQuantity() - createOrderReq.getQuantity() < 0) {
+        if (todayPsr.getQuantity() - countExistedOrders < createOrderReq.getQuantity()) {
             throw new OutOfStockException("糟糕!商品不夠了!");
         }
 
