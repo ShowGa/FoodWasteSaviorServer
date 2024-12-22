@@ -217,5 +217,21 @@ public class OrderServiceImpl implements OrderService {
         return "成功接受訂單!";
     }
 
+    @Override
+    public List<MyStoreOrdersListRes> getAllConfirmedOrdersList(String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
 
+        // get store
+        Store gotStore = storeRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到商家資訊，無法取得訂單!"));
+
+        // get all orders
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Taipei"));
+
+        List<MyStoreOrdersListRes> foundOrdersList = orderRepository.getAllConfirmedOrdersList(gotStore.getStoreId(), today);
+
+        if (foundOrdersList.isEmpty()) return Collections.emptyList();
+
+        return foundOrdersList;
+    }
 }

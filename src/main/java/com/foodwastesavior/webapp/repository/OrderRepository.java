@@ -75,7 +75,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     );
 
     @Query("""
-    SELECT new com.foodwastesavior.webapp.response.orderRes.MyStorePendingOrdersRes(
+    SELECT new com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes(
         o.orderId,
         o.confirmationCode,
         o.quantity,
@@ -89,6 +89,25 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
       AND o.orderStatus = 'WAITFORCONFIRM'
 """)
     List<MyStoreOrdersListRes> getAllWaitingForConfirmOrdersList(
+            @Param("storeId") Integer storeId,
+            @Param("today") LocalDate today
+    );
+
+    @Query("""
+    SELECT new com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes(
+        o.orderId,
+        o.confirmationCode,
+        o.quantity,
+        p.name,
+        p.coverImageUrl
+    )
+    FROM Order o
+    JOIN o.pack p
+    WHERE o.store.storeId = :storeId
+      AND o.orderDate = :today
+      AND o.orderStatus IN ('PENDING', 'READY')
+""")
+    List<MyStoreOrdersListRes> getAllConfirmedOrdersList(
             @Param("storeId") Integer storeId,
             @Param("today") LocalDate today
     );

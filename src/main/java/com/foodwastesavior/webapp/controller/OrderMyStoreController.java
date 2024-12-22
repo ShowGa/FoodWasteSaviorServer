@@ -37,4 +37,13 @@ public class OrderMyStoreController {
 
         return ResponseEntity.ok(ApiResponse.success(201, "成功接受訂單!", result));
     }
+
+    @GetMapping("/getconfirmedorderlist")
+    public ResponseEntity<ApiResponse<List<MyStoreOrdersListRes>>> getAllConfirmedOrdersList(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwt = authorizationHeader.substring(7);
+
+        List<MyStoreOrdersListRes> results = orderService.getAllConfirmedOrdersList(jwt);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found all today order list successfully!", results));
+    }
 }

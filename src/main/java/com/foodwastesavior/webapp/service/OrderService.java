@@ -18,4 +18,6 @@ public interface OrderService {
     List<MyStoreOrdersListRes> getAllWaitingForConfirmOrdersList(String jwt);
 
     String accepttheorder(Integer orderId, String jwt);
+
+    List<MyStoreOrdersListRes> getAllConfirmedOrdersList(String jwt);
 }
