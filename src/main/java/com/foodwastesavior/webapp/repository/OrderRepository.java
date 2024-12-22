@@ -74,6 +74,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             @Param("orderDate") LocalDate orderDate
     );
 
+    // ============= mystore ============ //
+
     @Query("""
     SELECT new com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes(
         o.orderId,

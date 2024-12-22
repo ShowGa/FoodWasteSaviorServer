@@ -176,6 +176,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String completeTheOrder(Integer orderId, String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get user
+        User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到使用者資訊，無法確認完成訂單!"));
+
+        // find order
+        Order foundOrder = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("沒有找到訂單資訊，無法完成訂單!"));
+
+        // check if the order belong to user
+        if (!Objects.equals(foundUser.getUserId(), foundOrder.getUser().getUserId())) {
+            throw new NotFoundException("沒有找到匹配訂單的資訊，無法更改!");
+        };
+
+        // update the status of order
+        foundOrder.setOrderStatus(Order.OrderStatus.COMPLETED);
+        Order savedOrder = orderRepository.save(foundOrder);
+
+        return "訂單已完成!請記得領取食物。";
+    }
+
+    // ================== mystore ================== //
+
+    @Override
     public List<MyStoreOrdersListRes> getAllWaitingForConfirmOrdersList(String jwt) {
         // verify token
         String subjectInfo = JwtUtil.validateToken(jwt);

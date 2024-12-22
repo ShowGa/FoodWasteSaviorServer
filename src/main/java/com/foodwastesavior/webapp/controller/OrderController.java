@@ -64,4 +64,13 @@ public class OrderController {
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found Order Detail Successfully!", result));
     }
+
+    @PatchMapping("/completetheorder/{orderId}")
+    public ResponseEntity<ApiResponse<String>> completeTheOrder(@PathVariable Integer orderId, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwt = authorizationHeader.substring(7);
+
+        String result = orderService.completeTheOrder(orderId, jwt);
+
+        return ResponseEntity.ok(ApiResponse.success(201, "Complete the order successfully!", result));
+    }
 }
