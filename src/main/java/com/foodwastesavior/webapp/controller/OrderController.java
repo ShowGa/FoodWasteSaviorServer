@@ -2,10 +2,7 @@ package com.foodwastesavior.webapp.controller;
 
 import com.foodwastesavior.webapp.request.CreateOrderReq;
 import com.foodwastesavior.webapp.response.ApiResponse;
-import com.foodwastesavior.webapp.response.orderRes.UserContributionRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderDetail;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderDetailRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
+import com.foodwastesavior.webapp.response.orderRes.*;
 import com.foodwastesavior.webapp.service.OrderService;
 import com.google.protobuf.Api;
 import org.apache.coyote.Response;
@@ -72,5 +69,15 @@ public class OrderController {
         String result = orderService.completeTheOrder(orderId, jwt);
 
         return ResponseEntity.ok(ApiResponse.success(201, "Complete the order successfully!", result));
+    }
+
+    @GetMapping("/user-order-history-list")
+    public ResponseEntity<ApiResponse<List<UserOrderHistoryListRes>>> getOrderHistoryList(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwt = authorizationHeader.substring(7);
+
+        List<UserOrderHistoryListRes> results = orderService.getOrderHistoryList(jwt);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Get user order history successfully!", results));
+
     }
 }

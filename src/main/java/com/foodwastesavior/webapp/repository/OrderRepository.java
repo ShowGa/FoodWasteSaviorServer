@@ -2,6 +2,7 @@ package com.foodwastesavior.webapp.repository;
 
 import com.foodwastesavior.webapp.model.entity.Order;
 import com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes;
+import com.foodwastesavior.webapp.response.orderRes.UserOrderHistoryListRes;
 import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -73,6 +74,21 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             @Param("orderId") Integer orderId,
             @Param("orderDate") LocalDate orderDate
     );
+
+    @Query("""
+    SELECT new com.foodwastesavior.webapp.response.orderRes.UserOrderHistoryListRes(
+        o.orderId,
+        o.orderDate,
+        s.name,
+        s.logoImageUrl
+    )
+    FROM Order o
+    JOIN o.store s
+    WHERE o.user.userId = :userId
+      AND o.orderStatus = 'COMPLETED'
+""")
+    List<UserOrderHistoryListRes> findCompletedOrdersByUserId(@Param("userId") Integer userId);
+
 
     // ============= mystore ============ //
 

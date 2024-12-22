@@ -198,6 +198,24 @@ public class OrderServiceImpl implements OrderService {
         return "訂單已完成!請記得領取食物。";
     }
 
+    @Override
+    public List<UserOrderHistoryListRes> getOrderHistoryList(String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get user
+        User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到使用者，無法找到訂單"));
+
+        // find add the list
+        List<UserOrderHistoryListRes> results = orderRepository.findCompletedOrdersByUserId(foundUser.getUserId());
+
+        if (results.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return results;
+    }
+
     // ================== mystore ================== //
 
     @Override
