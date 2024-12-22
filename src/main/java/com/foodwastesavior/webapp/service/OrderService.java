@@ -15,7 +15,7 @@ public interface OrderService {
     UserOrderDetail getUserOrderDetail(Integer orderId, String jwt);
 
     // ========= MyStore ========== //
-    List<MyStorePendingOrdersRes> getAllWaitingForConfirmOrdersList(String jwt);
+    List<MyStoreOrdersListRes> getAllWaitingForConfirmOrdersList(String jwt);
 
     String accepttheorder(Integer orderId, String jwt);
 }

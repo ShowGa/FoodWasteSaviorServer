@@ -1,11 +1,9 @@
 package com.foodwastesavior.webapp.controller;
 
-import com.foodwastesavior.webapp.model.entity.Order;
 import com.foodwastesavior.webapp.response.ApiResponse;
-import com.foodwastesavior.webapp.response.orderRes.MyStorePendingOrdersRes;
+import com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes;
 
 import com.foodwastesavior.webapp.service.OrderService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +20,10 @@ public class OrderMyStoreController {
     }
 
     @GetMapping("/getwaitforconfirmorderlist")
-    public ResponseEntity<ApiResponse<List<MyStorePendingOrdersRes>>> getAllWaitingForConfirmOrdersList(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<ApiResponse<List<MyStoreOrdersListRes>>> getAllWaitingForConfirmOrdersList(@RequestHeader("Authorization") String authorizationHeader) {
         String jwt = authorizationHeader.substring(7);
 
-        List<MyStorePendingOrdersRes> results = orderService.getAllWaitingForConfirmOrdersList(jwt);
+        List<MyStoreOrdersListRes> results = orderService.getAllWaitingForConfirmOrdersList(jwt);
 
         return ResponseEntity.ok(ApiResponse.success(200, "Found waiting for confirm list", results));
     }

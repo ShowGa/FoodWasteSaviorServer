@@ -11,15 +11,11 @@ import com.foodwastesavior.webapp.response.orderRes.*;
 import com.foodwastesavior.webapp.service.OrderService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
 import com.foodwastesavior.webapp.utils.OrderConfirmCodeGenerator;
-import org.aspectj.weaver.ast.Not;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -180,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<MyStorePendingOrdersRes> getAllWaitingForConfirmOrdersList(String jwt) {
+    public List<MyStoreOrdersListRes> getAllWaitingForConfirmOrdersList(String jwt) {
         // verify token
         String subjectInfo = JwtUtil.validateToken(jwt);
 
@@ -190,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
         // get all orders
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Taipei"));
 
-        List<MyStorePendingOrdersRes> foundOrdersList = orderRepository.getAllWaitingForConfirmOrdersList(gotStore.getStoreId(), today);
+        List<MyStoreOrdersListRes> foundOrdersList = orderRepository.getAllWaitingForConfirmOrdersList(gotStore.getStoreId(), today);
 
         if (foundOrdersList.isEmpty()) return Collections.emptyList();
 

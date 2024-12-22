@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MyStorePendingOrdersRes {
+public class MyStoreOrdersListRes {
     private Integer orderId;
     private String orderConfirmCode;
     private Integer orderQuantity;
