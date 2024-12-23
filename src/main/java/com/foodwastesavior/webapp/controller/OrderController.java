@@ -80,4 +80,13 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(200, "Get user order history successfully!", results));
 
     }
+
+    @GetMapping("/order-history-detail/{orderId}")
+    public ResponseEntity<ApiResponse<UserOrderHistoryDetailRes>> getUserOrderHistoryDetail(@PathVariable Integer orderId, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwt = authorizationHeader.substring(7);
+
+        UserOrderHistoryDetailRes result = orderService.getUserOrderHistoryDetail(orderId, jwt);
+
+        return ResponseEntity.ok(ApiResponse.success(200, "Found Order Detail Successfully!", result));
+    }
 }

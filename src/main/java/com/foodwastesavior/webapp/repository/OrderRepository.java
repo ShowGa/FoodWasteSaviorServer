@@ -1,9 +1,7 @@
 package com.foodwastesavior.webapp.repository;
 
 import com.foodwastesavior.webapp.model.entity.Order;
-import com.foodwastesavior.webapp.response.orderRes.MyStoreOrdersListRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderHistoryListRes;
-import com.foodwastesavior.webapp.response.orderRes.UserOrderList;
+import com.foodwastesavior.webapp.response.orderRes.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -129,5 +127,36 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             @Param("storeId") Integer storeId,
             @Param("today") LocalDate today
     );
+
+    @Query("""
+    SELECT new com.foodwastesavior.webapp.response.orderRes.UserOrderHistoryDetailRes(
+        o.orderId,
+        o.orderStatus,
+        o.orderDate,
+        o.totalPrice,
+        o.quantity,
+        o.confirmationCode,
+        s.storeId,
+        s.logoImageUrl,
+        s.name,
+        a.addressDetail,
+        a.latitude,
+        a.longitude,
+        p.name,
+        p.category
+    )
+    FROM Order o
+    JOIN o.store s
+    JOIN s.address a
+    JOIN o.pack p
+    WHERE o.orderId = :orderId
+      AND o.user.userId = :userId
+      AND o.orderStatus IN ('COMPLETED', 'CANCEL')
+""")
+    Optional<UserOrderHistoryDetailRes> findUserOrderHistoryDetail(
+            @Param("orderId") Integer orderId,
+            @Param("userId") Integer userId
+    );
+
 }
 

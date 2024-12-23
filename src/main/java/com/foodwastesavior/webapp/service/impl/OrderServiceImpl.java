@@ -216,6 +216,18 @@ public class OrderServiceImpl implements OrderService {
         return results;
     }
 
+    @Override
+    public UserOrderHistoryDetailRes getUserOrderHistoryDetail(Integer orderId, String jwt) {
+        // verify token
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // get user
+        User foundUser = userRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("找不到使用者相關資訊，無法取得歷史訂單!"));
+
+        // get order
+        return orderRepository.findUserOrderHistoryDetail(orderId, foundUser.getUserId()).orElseThrow(() -> new NotFoundException("沒有找到符合的紀錄！"));
+    }
+
     // ================== mystore ================== //
 
     @Override
