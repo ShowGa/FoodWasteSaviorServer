@@ -8,6 +8,7 @@ import com.foodwastesavior.webapp.repository.UserRepository;
 import com.foodwastesavior.webapp.request.CreateReviewReq;
 import com.foodwastesavior.webapp.service.ReviewService;
 import com.foodwastesavior.webapp.utils.JwtUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public String createReview(Integer storeId, CreateReviewReq createReviewReq, String jwt) {
         // verify token
         String subjectInfo = JwtUtil.validateToken(jwt);
@@ -33,13 +35,13 @@ public class ReviewServiceImpl implements ReviewService {
         User user = userRepo.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到相關資料，建立評價失敗!"));
 
         // calculate store rating , ratingCount, ratingSum
-        Double currentSum = foundStore.getRatingSum() != null ? foundStore.getRating() : 0.0;
+        Double currentSum = foundStore.getRatingSum() != null ? foundStore.getRatingSum() : 0.0;
         Integer currentCount =  foundStore.getRatingCount() != null ? foundStore.getRatingCount() : 0;
 
         currentSum += createReviewReq.getRating().doubleValue();
         currentCount += 1;
 
-        Double newAverageRating = currentSum / currentCount;
+        Double newAverageRating = Math.round((currentSum / currentCount) * 10.0) / 10.0;
 
         foundStore.setRatingSum(currentSum);
         foundStore.setRatingCount(currentCount);
