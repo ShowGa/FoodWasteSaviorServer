@@ -23,14 +23,14 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     );
 
     @Query("""
-            SELECT COALESCE(COUNT(o), 0L)
+            SELECT COALESCE(SUM(o.quantity), 0L)
             FROM Order o
             WHERE o.user.userId = :userId
             """)
     Optional<Long> countUserOrderAmount(@Param("userId") Integer userId);
 
     @Query("""
-            SELECT COALESCE(SUM(o.pack.originPrice - o.pack.discountPrice), 0L)
+            SELECT COALESCE(SUM((o.pack.originPrice - o.pack.discountPrice) * o.quantity), 0L)
             FROM Order o
             WHERE o.user.userId = :userId
             """)
