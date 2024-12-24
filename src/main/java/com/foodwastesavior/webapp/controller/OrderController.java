@@ -23,7 +23,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/user-contribution")
+    @GetMapping("/user-contribution/{userId}")
     public ResponseEntity<ApiResponse<UserContributionRes>> userContributionWithOrder(@PathVariable Integer userId, @RequestHeader("Authorization") String authorizationHeader) {
 
         String jwt = authorizationHeader.substring(7);
