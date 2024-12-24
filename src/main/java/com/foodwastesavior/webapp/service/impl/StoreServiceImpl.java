@@ -1,6 +1,7 @@
 package com.foodwastesavior.webapp.service.impl;
 
 import com.foodwastesavior.webapp.exception.NotFoundException;
+import com.foodwastesavior.webapp.model.dto.StoreProfileDTO;
 import com.foodwastesavior.webapp.model.entity.Address;
 import com.foodwastesavior.webapp.model.entity.Store;
 import com.foodwastesavior.webapp.repository.StoreRepository;
@@ -66,6 +67,37 @@ public class StoreServiceImpl implements StoreService {
                 foundAddress.getAddressDetail());
 
         return storeDetailRes;
+    }
+
+    // ============ mystore =========== //
+    @Override
+    public StoreProfileDTO getStoreInfo(String jwt) {
+        // verify token first
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // find store
+        Store foundStore = storeRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到店家相關資訊!"));
+
+        return new StoreProfileDTO(foundStore.getName(), foundStore.getCoverImageUrl(), foundStore.getLogoImageUrl(), foundStore.getAbout());
+    }
+
+    @Override
+    public StoreProfileDTO updateStoreInfo(StoreProfileDTO updatedInfo, String jwt) {
+        // verify token first
+        String subjectInfo = JwtUtil.validateToken(jwt);
+
+        // find store
+        Store foundStore = storeRepository.findByEmail(subjectInfo).orElseThrow(() -> new NotFoundException("沒有找到店家相關資訊!"));
+
+        foundStore.setName(updatedInfo.getName());
+        foundStore.setCoverImageUrl(updatedInfo.getCoverImageUrl());
+        foundStore.setLogoImageUrl(updatedInfo.getLogoImageUrl());
+        foundStore.setAbout(updatedInfo.getAbout());
+
+        Store updatedStore = storeRepository.save(foundStore);
+
+        // turn to dto
+        return new StoreProfileDTO(updatedStore.getName(), updatedStore.getCoverImageUrl(), updatedStore.getLogoImageUrl(), updatedStore.getAbout());
     }
 }
 
