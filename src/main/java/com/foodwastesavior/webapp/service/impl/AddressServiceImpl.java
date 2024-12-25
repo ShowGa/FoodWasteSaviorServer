@@ -37,7 +37,7 @@ public class AddressServiceImpl implements AddressService {
         Address foundUserAddress = addressRepository.findByUserId(foundUser.getUserId()).orElseThrow(() -> new NotFoundException("找不到相關地址資訊，無法更新。"));
 
         foundUserAddress.setLongitude(latitudeAndLongitudeDTO.getLongitude());
-        foundUserAddress.setLatitude(foundUserAddress.getLatitude());
+        foundUserAddress.setLatitude(latitudeAndLongitudeDTO.getLatitude());
 
         Address updatedAddress = addressRepository.save(foundUserAddress);
 
