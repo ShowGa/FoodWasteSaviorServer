@@ -28,7 +28,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<SearchCardRes> findStoreWithDistance(String jwt, Double longitude, Double latitude, Integer radius) {
         // verify token first
-        String subjectInfo = JwtUtil.validateToken(jwt);
+//        String subjectInfo = JwtUtil.validateToken(jwt);
 
         // find the store with distance
         List<Object[]> results = storeRepository.findStoresWithinDistance(longitude, latitude, Double.valueOf(radius));
