@@ -41,7 +41,6 @@ public class StoreController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         String jwt = authorizationHeader.substring(7);
-        System.out.println("storedetail : " + jwt);
 
         StoreDetailRes storeDetailRes = storeService.getStoreDetail(jwt, storeId);
 
